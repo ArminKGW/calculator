@@ -1,28 +1,41 @@
 const numbers = document.querySelector(".num-op");
 const display = document.querySelector(".display");
-let firstNumber = null, secondNumber = null, operator = null, inOperation = false, result;
+const clear = document.querySelector(".clear");
+let firstNumber = null, secondNumber = null, operator = null, inOperation = false, result, firstTimeSecondNumber = true;
+
 numbers.addEventListener("click", (event) => {
     if(event.target.className.includes("number")){
-        getNumber(event);
+        if(display.textContent.length < 22) getNumber(event);
     }
     if(event.target.className.includes("operator")){
-        /*if(firstNumber && secondNumber){
-            console.log("yes and yes");
+        if(firstNumber && secondNumber){
+            firstTimeSecondNumber = false;
+            secondNumber = display.textContent;
             result = operate(firstNumber, secondNumber, operator);
             display.textContent = result;
             firstNumber = display.textContent;
             secondNumber = null;
-        }*/
-        inOperation = true;
+        }
         operator = getOperator(event);
+        inOperation = true;
     }
     if(event.target.className == "do"){
-        secondNumber = display.textContent;
-        result = operate(firstNumber, secondNumber, operator);
-        display.textContent = result;
-        firstNumber = display.textContent;
-        secondNumber = null;
+        if(firstNumber && secondNumber){
+            secondNumber = display.textContent;
+            result = operate(firstNumber, secondNumber, operator);
+            display.textContent = result;
+            firstNumber = display.textContent;
+            secondNumber = null;
+        }
     }
+});
+
+clear.addEventListener("click", () => {
+    display.textContent = '0';
+    firstNumber = null;
+    secondNumber = null;
+    operator = null;
+    firstTimeSecondNumber = true;
 });
 
 function getOperator(event){
@@ -31,9 +44,7 @@ function getOperator(event){
         firstNumber = display.textContent;
     }
     else{
-        if(secondNumber == null){
-            secondNumber = display.textContent;
-        }       
+        secondNumber = display.textContent;    
     }
     return operator;
 }
@@ -41,7 +52,7 @@ function getOperator(event){
 function getNumber(event){
     let number = event.target.textContent; 
     if(inOperation) {
-        display.textContent = '';
+        display.textContent = '0';
         inOperation = false;
     }
     if(number === '.'){
@@ -53,6 +64,9 @@ function getNumber(event){
         display.textContent += number;
     }
     else display.textContent = number;
+    if(firstTimeSecondNumber){
+        secondNumber = display.textContent;
+    }
 }
 
 
