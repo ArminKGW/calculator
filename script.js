@@ -1,6 +1,7 @@
 const numbers = document.querySelector(".num-op");
 const display = document.querySelector(".display");
 const clear = document.querySelector(".clear");
+const backSpace = document.querySelector(".delete");
 let firstNumber = null, secondNumber = null, operator = null, inOperation = false, result, firstTimeSecondNumber = true;
 
 numbers.addEventListener("click", (event) => {
@@ -27,6 +28,19 @@ numbers.addEventListener("click", (event) => {
             firstNumber = display.textContent;
             secondNumber = null;
         }
+    }
+});
+
+backSpace.addEventListener("click", () => {
+    let str = display.textContent;
+    if(str != result){
+        str = str.split('');
+        str.pop();
+        str = str.join('');
+        if(str.length > 0){
+            display.textContent = str;
+        }
+        else display.textContent = '0';
     }
 });
 
