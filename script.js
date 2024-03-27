@@ -2,7 +2,8 @@ const numbers = document.querySelector(".num-op");
 const display = document.querySelector(".display");
 const clear = document.querySelector(".clear");
 const backSpace = document.querySelector(".delete");
-let firstNumber = null, secondNumber = null, operator = null, inOperation = false, result, firstTimeSecondNumber = true;
+let firstNumber = null, secondNumber = null, operator = null, inOperation = false, result, firstTimeSecondNumber = true, 
+key = null;
 
 numbers.addEventListener("click", (event) => {
     if(event.target.className.includes("number")){
@@ -29,6 +30,53 @@ numbers.addEventListener("click", (event) => {
             secondNumber = null;
         }
     }
+});
+
+document.addEventListener("keydown", (event) => {
+    key = event.key;
+    if((key <= '9' && key >= '0') || key === '.'){
+        if(display.textContent.length < 22) getNumberFromKey(key);
+    }
+    if(key === '+' || key === '-' || key === '*' || key === '/'){
+        if(firstNumber && secondNumber){
+            firstTimeSecondNumber = false;
+            secondNumber = display.textContent;
+            result = operate(firstNumber, secondNumber, operator);
+            display.textContent = result;
+            firstNumber = display.textContent;
+            secondNumber = null;
+        }
+        operator = key;
+        if(firstNumber == null){
+            firstNumber = display.textContent;
+        }
+        else{
+            secondNumber = display.textContent;    
+        }
+        inOperation = true;
+    }
+    if(key == "Enter"){
+        if(firstNumber && secondNumber){
+            secondNumber = display.textContent;
+            result = operate(firstNumber, secondNumber, operator);
+            display.textContent = result;
+            firstNumber = display.textContent;
+            secondNumber = null;
+        }
+    }
+    if(key == "Backspace"){
+        let str = display.textContent;
+        if(str != result){
+            str = str.split('');
+            str.pop();
+            str = str.join('');
+            if(str.length > 0){
+                display.textContent = str;
+        }
+            else display.textContent = '0';
+    }
+}
+    event.target.blur();
 });
 
 backSpace.addEventListener("click", () => {
@@ -83,6 +131,25 @@ function getNumber(event){
     }
 }
 
+function getNumberFromKey(number){ 
+    if(inOperation) {
+        display.textContent = '0';
+        inOperation = false;
+    }
+    if(number === '.'){
+        if(!(display.textContent.includes('.'))){
+            display.textContent += number;
+        }
+    }
+    else if(display.textContent != '0'){
+        display.textContent += number;
+    }
+    else display.textContent = number;
+    if(firstTimeSecondNumber){
+        secondNumber = display.textContent;
+    }
+}
+
 
 function add(a, b){
     return +a + +b;
@@ -97,6 +164,9 @@ function multiply(a, b){
 }
 
 function divide(a, b){
+    if(b == 0){
+        return "Cannot Do That!!";
+    }
     return +a / +b;
 }
 
@@ -109,6 +179,9 @@ function operate(a, b, operator){
         case '-':
             result = subtract(a, b);
             break;
+        case '*':
+            result = multiply(a, b);
+            break;
         case 'x':
             result = multiply(a, b);
             break;
@@ -118,4 +191,6 @@ function operate(a, b, operator){
     }
     return result;
 }
+
+
 

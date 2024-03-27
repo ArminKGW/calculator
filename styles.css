@@ -8,6 +8,11 @@ body{
     background-color:rgb(43, 43, 43);
 }
 
+.container{
+    border: 12px solid rgb(167, 167, 167);
+    border-radius: 8px;
+}
+
 button{
     font-size: 26px;
     border: solid black 2px;
@@ -19,7 +24,7 @@ button{
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    background-color: rgb(198, 186, 186);
+    background-color: #FFFDD0;
     font-size: 32px;
     padding: 4px;
 }
@@ -62,4 +67,6 @@ button{
 .number, .do, .decimal{
     background-color: rgb(101, 98, 98);
 }
+
+
 
